@@ -8,14 +8,14 @@ xp = 0
 level = 1
 streak = 0
 
-def Check_Level(xp):
+def check_Level(xp):
   return xp // 100 + 1
 
 def extract_text_from_pdf(file_path):
   reader = PdfReader(file_path)
   text = ""
 
-  for page in reader.page:
+  for page in reader.pages:
     page_text = page.extract_text()
     if page_text:
       text += page_text + "\n"
@@ -38,8 +38,7 @@ Text:
       messages=[{"role": "user", "content": prompt}]
     )
   
-    return response.chioces[0[.message.content
-
+    return response.choices[0].message.content
 
 def parse_response(ai_text):
     lines = ai_text.split("\n")
