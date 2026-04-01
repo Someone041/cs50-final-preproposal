@@ -56,3 +56,6 @@ def parse_response(ai_text):
 
     return q, a, e
 
+print("AI quiz system")
+print("Type 'pdf' to upload a file or 'text' to paste notes:")
+choice = input("> ").lower()
