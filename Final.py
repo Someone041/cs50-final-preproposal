@@ -20,3 +20,17 @@ def extract_text_from_pdf(file_path):
     if page_text:
       text += page_text + "\n"
   return text
+
+def generate_question_ai(text):
+    prompt = f"""
+Create one quiz question based on the text below.
+
+Format EXACTLY like this:
+Question: ...
+Answer: ...
+Explanation: ...
+
+Text:
+{text[:1500]}
+"""
+
