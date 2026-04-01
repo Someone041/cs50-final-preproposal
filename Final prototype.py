@@ -78,3 +78,42 @@ else:
 
 print("\n--- Generating Quiz ---\n")
   
+for i in range(3):
+
+  try:
+    ai_output = generate_question_ai(text)
+        question, answer, explanation = parse_response(ai_output)
+
+        print(f"Q{i+1}: {question}")
+        user_answer = input("Your answer: ")
+
+        if user_answer.strip().lower() == answer.lower():
+            print("✅ Correct!")
+            xp += 10
+            streak += 1
+
+            if streak >= 2:
+                xp += 5
+                print("🔥 Streak bonus!")
+
+        else:
+            print("❌ Incorrect!")
+            print("Correct answer:", answer)
+            streak = 0
+          
+        print("Explanation:", explanation)
+
+        new_level = check_level(xp)
+
+        if new_level > level:
+            level = new_level
+            print(f"🎉 LEVEL UP! You are now Level {level}")
+
+        print(f"XP: {xp} | Level: {level} | Streak: {streak}")
+        print("-" * 50)
+
+    except Exception as e:
+        print("⚠️ Error generating question.")
+        print(e)
+
+print("\n✅ Quiz complete!")
