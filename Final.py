@@ -41,3 +41,18 @@ Text:
     return response.chioces[0[.message.content
 
 
+def parse_response(ai_text):
+    lines = ai_text.split("\n")
+
+    q, a, e = "", "", ""
+
+    for line in lines:
+        if line.lower().startswith("question"):
+            q = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("answer"):
+            a = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("explanation"):
+            e = line.split(":", 1)[1].strip()
+
+    return q, a, e
+
