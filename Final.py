@@ -59,3 +59,22 @@ def parse_response(ai_text):
 print("AI quiz system")
 print("Type 'pdf' to upload a file or 'text' to paste notes:")
 choice = input("> ").lower()
+
+if choice =="pdf":
+  path = input("enter pdf path here: ")
+  text = extract_text_from_pdf(path)
+
+else:
+  print("Paste your notes (press ENTER twice to finish):")
+
+  lines = []
+  while True:
+    line = input()
+    if line == "":
+      break
+    lines.append(line)
+
+  text = "\n".join(lines)
+
+print("\n--- Generating Quiz ---\n")
+  
