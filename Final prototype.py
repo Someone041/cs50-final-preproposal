@@ -29,6 +29,7 @@ xp = progress["xp"]
 level = progress["level"]
 streak = progress["streak"]
 
+#Pdf text extraction
 
 def extract_text_from_pdf(file_path):
   reader = PdfReader(file_path)
@@ -40,6 +41,7 @@ def extract_text_from_pdf(file_path):
       text += page_text + "\n"
   return text
 
+# AI questions generator 
 def generate_question_ai(text):
     prompt = f"""
 Create one quiz question based on the text below.
