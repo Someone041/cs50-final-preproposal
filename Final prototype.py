@@ -44,9 +44,15 @@ def extract_text_from_pdf(file_path):
 # AI questions generator 
 def generate_question_ai(text):
     prompt = f"""
-Create one quiz question based on the text below.
+Create one {difficulty} quiz question based on the text below.
+
+Randomly choose ONE type:
+- Multiple choice (A, B, C, D)
+- True/False
+- Short answer
 
 Format EXACTLY like this:
+Type: ...
 Question: ...
 Answer: ...
 Explanation: ...
@@ -61,20 +67,23 @@ Text:
   
     return response.choices[0].message.content
 
+#Parse responses
 def parse_response(ai_text):
     lines = ai_text.split("\n")
 
     q, a, e = "", "", ""
 
     for line in lines:
-        if line.lower().startswith("question"):
+        if line.lower().startswith("type"):
+            t = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("question"):
             q = line.split(":", 1)[1].strip()
         elif line.lower().startswith("answer"):
             a = line.split(":", 1)[1].strip()
         elif line.lower().startswith("explanation"):
             e = line.split(":", 1)[1].strip()
-
-    return q, a, e
+          
+    return t, q, a, e
 
 print("AI quiz system")
 print("Type 'pdf' to upload a file or 'text' to paste notes:")
