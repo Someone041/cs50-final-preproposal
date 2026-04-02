@@ -84,7 +84,7 @@ def parse_response(ai_text):
             e = line.split(":", 1)[1].strip()
           
     return t, q, a, e
-
+#input system
 print("AI quiz system")
 print("Type 'pdf' to upload a file or 'text' to paste notes:")
 choice = input("> ").lower()
@@ -92,6 +92,10 @@ choice = input("> ").lower()
 if choice =="pdf":
   path = input("enter pdf path here: ")
   text = extract_text_from_pdf(path)
+
+ if not text.strip():
+        print("⚠️ No text found in PDF.")
+        exit()
 
 else:
   print("Paste your notes (press ENTER twice to finish):")
@@ -105,25 +109,41 @@ else:
 
   text = "\n".join(lines)
 
+# Quiz Setup
+
+num_questions = int(input("How many questions? "))
+
 print("\n--- Generating Quiz ---\n")
-  
-for i in range(3):
+#Quiz Loop
+
+for i in range(num_questions):
+
+    print("\n" + "="*50)
+    print(f"QUESTION {i+1}")
+    print("="*50)
 
   try:
-    ai_output = generate_question_ai(text)
+        difficulty = "easy"
+        if level >= 3:
+            difficulty = "medium"
+        if level >= 5:
+            difficulty = "hard"
+
+    ai_output = generate_question_ai(text, difficulty)
     question, answer, explanation = parse_response(ai_output)
 
-        print(f"Q{i+1}: {question}")
+        print(f"Type: {q_type}")
+        print(f"Q: {question}")
         user_answer = input("Your answer: ")
 
-        if user_answer.strip().lower() == answer.lower():
-            print("✅ Correct!")
+        if check_answer(user_answer.strip(), answer):
+            print("Correct!")
             xp += 10
             streak += 1
 
             if streak >= 2:
                 xp += 5
-                print("🔥 Streak bonus!")
+                print("Streak bonus!")
 
         else:
             print("❌ Incorrect!")
@@ -131,18 +151,22 @@ for i in range(3):
             streak = 0
           
         print("Explanation:", explanation)
-
+   # Level system
         new_level = check_level(xp)
-
         if new_level > level:
             level = new_level
-            print(f"🎉 LEVEL UP! You are now Level {level}")
+            print(f LEVEL UP! You are now Level {level}")
 
         print(f"XP: {xp} | Level: {level} | Streak: {streak}")
         print("-" * 50)
 
-    except Exception as e:
-        print("⚠️ Error generating question.")
+         # Save progress
+        save_progress(xp, level, streak)
+        except Exception as e:
+        print("Error generating question.")
         print(e)
 
-print("\n✅ Quiz complete!")
+print("\n FINAL RESULTS")
+print(f"XP: {xp}")
+print(f"Level: {level}")
+print("Quiz complete!")
