@@ -1,6 +1,7 @@
 import os 
 from PyPDF2 import PdfReader
 from openai import OpenAI
+import json
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -10,6 +11,24 @@ streak = 0
 
 def check_Level(xp):
   return xp // 100 + 1
+
+def save_progress(xp, level, streak):
+  data = {"xp": xp, "level": level, "streak": streak}
+  with open("progress.json", "w") as f:
+    json.dump(data, f)
+
+def load_progress():
+  try:
+    with open("progress.json", "r") as f:
+            return json.load(f)
+    except:
+        return {"xp": 0, "level": 1, "streak": 0}
+
+progress = load_progress()
+xp = progress["xp"]
+level = progress["level"]
+streak = progress["streak"]
+
 
 def extract_text_from_pdf(file_path):
   reader = PdfReader(file_path)
@@ -81,7 +100,7 @@ for i in range(3):
 
   try:
     ai_output = generate_question_ai(text)
-        question, answer, explanation = parse_response(ai_output)
+    question, answer, explanation = parse_response(ai_output)
 
         print(f"Q{i+1}: {question}")
         user_answer = input("Your answer: ")
