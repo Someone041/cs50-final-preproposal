@@ -169,7 +169,7 @@ try:
                 print("Streak bonus!")
 
         else:
-            print("❌ Incorrect!")
+            print("Incorrect!")
             print("Correct answer:", answer)
             streak = 0
           
