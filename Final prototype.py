@@ -42,9 +42,14 @@ def extract_text_from_pdf(file_path):
   return text
 
 # AI questions generator 
-def generate_question_ai(text):
+def generate_question_ai(text, difficulty):
     prompt = f"""
 Create one {difficulty} quiz question based on the text below.
+
+Difficulty rules:
+- Easy: simple definitions or direct facts
+- Medium: requires understanding
+- Hard: requires reasoning or explanation
 
 Randomly choose ONE type:
 - Multiple choice (A, B, C, D)
@@ -61,10 +66,10 @@ Text:
 {text[:1500]}
 """
     response = client.chat.completions.create(
-      model="gpt-4.1-mini",
-      messages=[{"role": "user", "content": prompt}]
+        model="gpt-4.1-mini",
+        messages=[{"role": "user", "content": prompt}]
     )
-  
+
     return response.choices[0].message.content
 
 #Parse responses
