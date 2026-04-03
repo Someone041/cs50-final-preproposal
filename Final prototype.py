@@ -76,7 +76,7 @@ Text:
 def parse_response(ai_text):
     lines = ai_text.split("\n")
 
-    q, a, e = "", "", ""
+    t, q, a, e = "", "", ""
 
     for line in lines:
         if line.lower().startswith("type"):
@@ -89,6 +89,11 @@ def parse_response(ai_text):
             e = line.split(":", 1)[1].strip()
           
     return t, q, a, e
+
+#Answer Checker
+def check_answer(user, correct):
+    return user.lower() in correct.lower()
+  
 #input system
 print("AI quiz system")
 print("Type 'pdf' to upload a file or 'text' to paste notes:")
@@ -99,7 +104,7 @@ if choice =="pdf":
   text = extract_text_from_pdf(path)
 
  if not text.strip():
-        print("⚠️ No text found in PDF.")
+        print("No text found in PDF.")
         exit()
 
 else:
@@ -118,6 +123,9 @@ else:
 
 num_questions = int(input("How many questions? "))
 
+print("Choose difficulty: easy / medium / hard")
+difficulty = input("> ").lower()
+
 print("\n--- Generating Quiz ---\n")
 #Quiz Loop
 
@@ -127,18 +135,28 @@ for i in range(num_questions):
     print(f"QUESTION {i+1}")
     print("="*50)
 
-  try:
-        difficulty = "easy"
-        if level >= 3:
+try:
+        if streak >= 3:
+            difficulty = "hard"
+        elif streak >= 1:
             difficulty = "medium"
-        if level >= 5:
+        else:
+            difficulty = "easy"
+
+        if level >= 5 and difficulty != "hard":
+            difficulty = "medium"
+        elif level >= 8:
             difficulty = "hard"
 
-    ai_output = generate_question_ai(text, difficulty)
-    question, answer, explanation = parse_response(ai_output)
+        print(f"Difficulty for this question: {difficulty.upper()}")
+
+try:
+        ai_output = generate_question_ai(text, difficulty)
+        q_type, question, answer, explanation = parse_response(ai_output)
 
         print(f"Type: {q_type}")
         print(f"Q: {question}")
+
         user_answer = input("Your answer: ")
 
         if check_answer(user_answer.strip(), answer):
